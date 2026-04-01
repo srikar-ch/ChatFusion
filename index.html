@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChatFusion Orchestration</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css?v=5">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button id="new-chat-btn" class="btn-primary" title="New Chat (Ctrl + K)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                    New Chat
+                </button>
+            </div>
+            
+            <div class="history-list" id="history-list">
+                <!-- History items will be injected here -->
+            </div>
+            
+            <div class="sidebar-footer">
+                <button id="clear-chats-btn" class="btn-secondary" title="Clear All Chats (Ctrl + Shift + C)">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"></path><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                    Clear All Chats
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="top-bar">
+                <div class="left-controls">
+                    <h1>ChatFusion</h1>
+                </div>
+                <!-- Model Selection Panel -->
+                <div class="model-selection-panel" id="model-selection-panel">
+                    <span class="panel-label">Active Models:</span>
+                    <label class="model-checkbox"><input type="checkbox" value="chatgpt" checked> ChatGPT</label>
+                    <label class="model-checkbox"><input type="checkbox" value="gemini" checked> Gemini</label>
+                    <label class="model-checkbox"><input type="checkbox" value="claude" checked> Claude</label>
+                    <label class="model-checkbox"><input type="checkbox" value="grok" checked> Grok</label>
+                    <label class="model-checkbox"><input type="checkbox" value="deepseek" checked> DeepSeek</label>
+                </div>
+
+                <div class="right-controls">
+                    <div class="dropdown-wrapper">
+                        <button id="export-btn" class="icon-btn" title="Export Chat">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        </button>
+                        <div class="export-menu" id="export-menu">
+                            <div class="export-item" data-type="txt">Export as TXT</div>
+                            <div class="export-item" data-type="json">Export as JSON</div>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-toggle-container">
+                        <svg class="theme-icon-label" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>
+                        <label class="switch">
+                            <input type="checkbox" id="theme-toggle-switch" title="Toggle Dark/Light Mode">
+                            <span class="slider round"></span>
+                        </label>
+                        <svg class="theme-icon-label" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Orchestration Status Panel -->
+            <div id="orchestration-status" class="orchestration-status hidden">
+                <div class="status-indicator">
+                    <span class="status-dot pulsing"></span>
+                    <span id="status-text">ChatFusion Orchestration Engine Ready</span>
+                </div>
+                <div class="status-metrics">
+                    <span class="metric" id="metric-models">Active Models: 5</span>
+                    <span class="metric" id="metric-responses">Responses Collected: 0/5</span>
+                </div>
+            </div>
+            
+            <div id="chat-window" class="chat-window">
+                <!-- Welcome -->
+                <div id="welcome-screen" class="welcome-screen">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                    <h2>Welcome to ChatFusion</h2>
+                    <p>A multi-model AI orchestration platform. Enable models above and start your query.</p>
+                </div>
+            </div>
+
+            <!-- Input Area -->
+            <div class="input-area">
+                <div class="input-wrapper">
+                    <textarea id="chat-input" placeholder="Message ChatFusion Engine..." rows="1"></textarea>
+                    <button id="send-btn" class="send-btn">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+                    </button>
+                </div>
+                <div class="input-footer">
+                    <span>Press <strong>Enter</strong> or <strong>Ctrl+Enter</strong> to send</span>
+                    <span>•</span>
+                    <span><strong>Shift+Enter</strong> new line</span>
+                    <span>•</span>
+                    <span><strong>Ctrl+K</strong> new chat</span>
+                    <span>•</span>
+                    <span><strong>Ctrl+Shift+C</strong> clear all</span>
+                </div>
+            </div>
+        </main>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="app.main.js?v=5"></script>
+</body>
+</html>
